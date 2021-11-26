@@ -36,6 +36,7 @@ int main(void) {
 			exit_error("Error: accept error\n");
 		read(sock_fd, &buffer,255);
 		int file_fd = open(buffer, O_CREAT | O_TRUNC | O_WRONLY, 00666);
+		bzero(&buffer, 256);
 		write(sock_fd, "OK", 2);
 		ssize_t readed;
 		while ((readed = read(sock_fd, &buffer, 255))) {
@@ -43,7 +44,8 @@ int main(void) {
 				close(file_fd);
 				break;
 			}
-			write(file_fd, buffer, 255);
+			write(file_fd, buffer, strlen(buffer));
+			bzero(&buffer, 256);
 			write(sock_fd, "NEXT", 4);
 		}
 		close(file_fd);

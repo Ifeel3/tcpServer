@@ -24,11 +24,13 @@ int main(int argc, char **argv) {
 			file_name = argv[1];
 		write(sock, file_name, strlen(file_name));
 		read(sock, &buffer, 255);
+		bzero(buffer, 256);
 		ssize_t readed;
 		while ((readed = read(file_fd, &buffer, 255))) {
 			if (readed == -1)
 				break;
 			write(sock, &buffer, 255);
+			bzero(buffer, 256);
 			read(sock, &buffer, 255);
 			if (strcmp(buffer, "NEXT") == 0)
 				continue;
