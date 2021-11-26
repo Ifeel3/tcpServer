@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
 		char *file_name = strrchr(argv[1], '/');
 		if (file_name == NULL)
 			file_name = argv[1];
+		else
+			file_name++;
 		write(sock, file_name, strlen(file_name));
 		read(sock, &buffer, 255);
 		bzero(buffer, 256);
