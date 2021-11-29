@@ -4,8 +4,8 @@ SRCC	= src/client.c src/utils.c
 SRCS	= src/server.c src/utils.c
 OBJC	= $(SRCC:%.c=%.o)
 OBJS	= $(SRCS:%.c=%.o)
-CC		= clang
-CFLAGS	= -Wall -Werror -Wextra -std=c99
+CC	= gcc
+CFLAGS	= -Wall -Werror -Wextra
 
 .PHONY: all clean fclean re
 
