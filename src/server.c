@@ -17,13 +17,12 @@ int main(void) {
 	struct sockaddr_in addr = {0};
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(PORT);
-	addr.sin_len = sizeof(addr);
 	addr.sin_addr.s_addr = INADDR_ANY;
 
 	int sock;
 	if ((sock = socket(PF_INET, SOCK_STREAM, 0)) == -1)
 		exit_error("Error: socket creation failed\n");
-	if (bind(sock, (const struct sockaddr *)&addr, addr.sin_len) == -1)
+	if (bind(sock, (const struct sockaddr *)&addr, sizeof(addr)) == -1)
 		exit_error("Error: bind failed\n");
 	if (listen(sock, 10) != 0)
 		exit_error("Error: listen failed\n");
