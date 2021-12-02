@@ -11,7 +11,7 @@ static void daemonise()
 	if (setsid() < 0)
 		exit_error("Error: child not session leader\n");
 
-	signal(SIGCHLD, SIG_DFL);
+	signal(SIGTERM, SIG_DFL);
 	signal(SIGHUP, SIG_DFL);
 
 	pid = fork();
@@ -57,4 +57,5 @@ int main(void) {
 		if (readed == -1)
 			exit_error("Error: problem?");
 		}
+	return (EXIT_SUCCESS);
 }
