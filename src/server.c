@@ -1,18 +1,29 @@
 #include "utils.h"
-#include <stdio.h>
 
-void handler(int sig, siginfo_t *siginfo, void *unuse) {
-	(void) sig;
-	(void) siginfo;
-	(void) unuse;
-	exit(EXIT_SUCCESS);
+static void daemonise()
+{
+	pid_t pid = fork();
+
+	if (pid < 0)
+		exit_error("Error: fork failed\n");
+	if (pid > 0)
+		exit(EXIT_SUCCESS);
+	if (setsid() < 0)
+		exit_error("Error: child not session leader\n");
+
+	signal(SIGCHLD, SIG_DFL);
+	signal(SIGHUP, SIG_DFL);
+
+	pid = fork();
+	if (pid < 0)
+		exit_error("Error: fork failed\n");
+	if (pid > 0)
+		exit(EXIT_SUCCESS);
 }
 
 int main(void) {
-	struct sigaction catch;
-	catch.sa_sigaction = handler;
-	sigaction(SIGTERM, &catch, 0);
-	sigaction(SIGHUP, &catch, 0);
+	daemonise();
+	chdir("/");
 
 	struct sockaddr_in addr = {0};
 	addr.sin_family = AF_INET;
@@ -39,10 +50,6 @@ int main(void) {
 		write(sock_fd, "OK", 2);
 		ssize_t readed;
 		while ((readed = read(sock_fd, &buffer, 255))) {
-			if (strcmp(buffer, "EOF") == 0) {
-				close(file_fd);
-				break;
-			}
 			write(file_fd, buffer, strlen(buffer));
 			bzero(&buffer, 256);
 			write(sock_fd, "NEXT", 4);
@@ -51,5 +58,5 @@ int main(void) {
 		if (readed == -1)
 			exit_error("Error: problem?");
 		}
-	return 0;
+	return EXIT_SUCCESS;
 }
