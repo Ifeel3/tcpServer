@@ -43,7 +43,6 @@ int main(int argc, char **argv) {
 		}
 		else {
 			close(file_fd);
-			write(sock, "EOF", 3);
 		}
 	}
 	return (EXIT_SUCCESS);
