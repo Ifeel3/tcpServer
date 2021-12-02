@@ -23,7 +23,6 @@ static void daemonise()
 
 int main(void) {
 	daemonise();
-	chdir("/");
 
 	struct sockaddr_in addr = {0};
 	addr.sin_family = AF_INET;
