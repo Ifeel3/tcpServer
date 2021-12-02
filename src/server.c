@@ -57,5 +57,4 @@ int main(void) {
 		if (readed == -1)
 			exit_error("Error: problem?");
 		}
-	return EXIT_SUCCESS;
 }
